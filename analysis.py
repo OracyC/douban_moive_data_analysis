@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from bs4 import BeautifulSoup
 import re
 import urllib.request,urllib.error
@@ -8,9 +6,7 @@ import xlwt
 # main
 def main():
     baseurl = "https://movie.douban.com/top250?start="
-    # 爬取网页
     datalist = getData(baseurl)
-    # 保存数据
     savepath = ".\\DoubanTop250.xls"
     saveData(datalist,savepath)
 
@@ -91,7 +87,6 @@ def askURL(url):
             print(e.reason)
     return html
 
-# 保存函数
 def saveData(datalist,savepath):
     book = xlwt.Workbook(encoding="utf-8",style_compression=0)
     sheet = book.add_sheet("DoubanTop250",cell_overwrite_ok=True)
