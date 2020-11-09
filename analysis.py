@@ -173,6 +173,9 @@ train = data[new_features]
 dummies1 = data['movie_type'].str.get_dummies(sep=' ')
 train = pd.concat([train, dummies1], axis=1) 
 
+dummies2 = data['movie_language'].str.get_dummies(sep=' ')
+train = pd.concat([train, dummies2], axis=1) 
+
 from sklearn.model_selection  import train_test_split
 
 y = train.movie_rate
@@ -217,4 +220,26 @@ print_score(rf)
 fi = feature_importance(rf, X_train)
 fi[-10:]
 
-plot_fi(fi[-10:])
+plot_fi(fi[-8:])
+
+import lightgbm as lgb
+
+lgbm = lgb.LGBMRegressor(objective='regression',num_leaves=8,
+                              learning_rate=0.05, n_estimators=650,
+                              max_bin=58, bagging_fraction=0.80,
+                              bagging_freq=5, feature_fraction=0.2319,
+                              feature_fraction_seed=9, bagging_seed=9,
+                              min_data_in_leaf=7, min_sum_hessian_in_leaf=11)
+                              
+X_train['movie_date'] = X_train['movie_date'].astype('int')
+X_test['movie_date'] = X_test['movie_date'].astype('int')
+lgbm.fit(X_train, y_train, eval_set=[(X_test, y_test)],eval_metric='l1',early_stopping_rounds=10)
+print_score(lgbm)
+
+booster = lgbm.booster_
+importance = booster.feature_importance(importance_type='split')
+feature_name = booster.feature_name()
+feature_importance = pd.DataFrame({'字段':feature_name,'重要性':importance} ).sort_values('重要性', ascending=True)
+feature_importance[-15:]
+
+plot_fi(feature_importance[-8:])
