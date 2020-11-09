@@ -1,4 +1,4 @@
-# 豆瓣Top250电影爬虫+数据清洗+统计分析+EDA+机器学习建模
+# 豆瓣Top250电影爬虫+数据清洗+统计分析+EDA+特征工程+机器学习建模
 
 [analysis.ipynb](https://github.com/OracyC/douban_moive_data_analysis/blob/master/analysis.ipynb) -- Jupter Notebook写的python脚本，可以看到每个代码段的运行结果
 
